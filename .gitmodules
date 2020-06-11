@@ -1,0 +1,3 @@
+[submodule "mc-resource-pack"]
+	path = mc-resource-pack
+	url = https://github.com/ZtechNetwork/MCJVanillaResourcePack.git

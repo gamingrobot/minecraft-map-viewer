@@ -1,0 +1,12 @@
+[package]
+name = "minecraft-map-viewer"
+version = "0.1.0"
+authors = ["Morgan Creekmore <morgan@creekmore.email>"]
+edition = "2018"
+
+[[bin]]
+name = "minecraft-map-viewer"
+
+[dependencies]
+piston_window = "0.109.0"
+find_folder = "0.3.0"
