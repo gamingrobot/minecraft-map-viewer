@@ -15,6 +15,9 @@ fn main() {
     const TILE_SIZE: f64 = 16.0;
 
     let mut scale: f64 = 1.0;
+    let mut drag_active: bool = false;
+    //todo make 2dvector
+    let mut drag_offset: [f64; 2] = [0.0, 0.0];
 
     #[derive(Clone)]
     struct Tile {
@@ -35,7 +38,6 @@ fn main() {
         &TextureSettings::new(),
     ).unwrap();
 
-    let (width, _) = tile_texture.get_size();
     let image = Image::new();
 
     while let Some(e) = window.next() {
@@ -43,8 +45,8 @@ fn main() {
             window.draw_2d(&e, |c, g, _| {
                 clear([0.5; 4], g);
                 for i in 0..10 {
-                    let x = i as f64 * TILE_SIZE * scale;
-                    let y = TILE_SIZE * scale;
+                    let x = i as f64 * TILE_SIZE * scale + drag_offset[0];
+                    let y = TILE_SIZE * scale + drag_offset[1];
                     image.rect(rectangle::square(x, y, TILE_SIZE * scale)).draw(
                         &tile_texture,
                         &c.draw_state,
@@ -55,8 +57,8 @@ fn main() {
 
             });
         }
-        if let Some(m) = e.mouse_scroll_args() {
-            if m[1] > 0.0 {
+        if let Some(ms) = e.mouse_scroll_args() {
+            if ms[1] > 0.0 {
                 scale += 0.1;
             }
             else {
@@ -65,5 +67,18 @@ fn main() {
                 }
             }
         }
+        if let Some(m) = e.mouse_relative_args() {
+            println!("{:?}", m);
+            if drag_active {
+                drag_offset[0] += m[0];
+                drag_offset[1] += m[1];
+            }
+        }
+        if let Some(Button::Mouse(MouseButton::Left)) = e.press_args() {
+            drag_active = true;
+        }
+        if let Some(Button::Mouse(MouseButton::Left)) = e.release_args() {
+            drag_active = false;
+        };
     }
 }
